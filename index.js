@@ -5,7 +5,8 @@ const { createServer } = require('node:http');
 const { join } = require('node:path');
 const path = require('path');
 const cors = require("cors");
-const { sequelize } = require('./config/index.js'); // Asegúrate de usar la ruta correcta
+//const { sequelize } = require('./config/index1.js'); // Asegúrate de usar la ruta correcta
+const sequelize = require('./config/index.js');
 
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -36,15 +37,20 @@ app.use(bodyParser.json());
 //router config
 app.use('/api', router);
 app.use('/api/users', require('./routes/users.routes.js'));
-
+app.use('/api/inventory', require('./routes/inventory.routes.js'));
+app.use('/api/categories', require('./routes/categories.routes.js'));
+app.use('/api/subcategories', require('./routes/subcategories.routes.js'));
+app.use('/api/shoppingCarts', require('./routes/shoppingCarts.routes.js'));
+app.use('/api/favorites', require('./routes/favorites.routes.js'));
+app.use('/api/sales', require('./routes/sales.routes.js'));
+app.use('/api/logs', require('./routes/logs.routes.js'));
 const sequelizeOptions = {};
 
 
 if (!process.env.PROD) {
-    sequelizeOptions.force = true;
+    sequelizeOptions.alter = true;
 }
 
-sequelizeOptions.force = true;
 app.get('*', (req, res) => {
     res.sendFile(join(__dirname, './client/build/index.html'));
   });
@@ -53,9 +59,6 @@ server.listen(3000, async() => {
   try {
     await sequelize.authenticate();
     console.log('Connection has been established successfully.');
-    await sequelize.sync(sequelizeOptions); // Sync models with the database
-    console.log(sequelize.models);
-    console.log('Database synchronized');
   } catch (error) {
     console.error('Unable to connect to the database:', error);
   }  

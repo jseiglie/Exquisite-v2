@@ -15,6 +15,13 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      sellerId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Users',
+          key: 'id',
+        },
+      },
       discount: {
         type: DataTypes.DECIMAL(10, 2),
         defaultValue: 0,

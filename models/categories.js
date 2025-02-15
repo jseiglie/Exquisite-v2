@@ -1,7 +1,7 @@
-// models/categories.js
+"use strict";
 module.exports = (sequelize, DataTypes) => {
   const Category = sequelize.define(
-    "Category", // Nombre singular, con mayúscula
+    "Category", 
     {
       id: {
         type: DataTypes.INTEGER,

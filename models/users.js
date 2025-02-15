@@ -44,10 +44,9 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Users.associate = (models) => {
-    Users.hasMany(models.Sales, { foreignKey: 'userId' });
-    Users.hasMany(models.ShoppingCarts, { foreignKey: 'userId' });
-    Users.hasMany(models.Favorites, { foreignKey: 'userId' });
-
+    Users.hasMany(models.Sales, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
+    Users.hasMany(models.ShoppingCarts, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
+    Users.hasMany(models.Favorites, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
   };
 
   return Users;

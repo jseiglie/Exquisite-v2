@@ -15,10 +15,13 @@ module.exports = (sequelize, DataTypes) => {
       },
       categoryId: {
         type: DataTypes.INTEGER,
+        onDelete: 'CASCADE', // Add this line
+
       },
       subcategoryId: {
         type: DataTypes.INTEGER,
-    
+        onDelete: 'CASCADE', // Add this line
+
       },
       price: {
         type: DataTypes.DECIMAL(10, 2),
@@ -41,6 +44,9 @@ module.exports = (sequelize, DataTypes) => {
   Inventory.associate = (models) => {
     Inventory.belongsTo(models.Category, { foreignKey: 'categoryId' });
     Inventory.belongsTo(models.Subcategory, { foreignKey: 'subcategoryId' });
+    Inventory.hasMany(models.Favorites, { foreignKey: 'inventoryId', onDelete: 'CASCADE' }); // Add this line
+    Inventory.hasMany(models.Sales, { foreignKey: 'inventoryId', onDelete: 'CASCADE' }); // Add this line
+    Inventory.hasMany(models.ShoppingCarts, { foreignKey: 'inventoryId', onDelete: 'CASCADE' }); // Add this line
   };
 
   return Inventory;

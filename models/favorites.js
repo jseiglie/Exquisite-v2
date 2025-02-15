@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Inventory',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
       userId: {
         type: DataTypes.INTEGER,
@@ -21,6 +22,7 @@ module.exports = (sequelize, DataTypes) => {
           model: 'Users',
           key: 'id',
         },
+        onDelete: 'CASCADE',
       },
     },
     {
@@ -32,8 +34,7 @@ module.exports = (sequelize, DataTypes) => {
 
   Favorites.associate = (models) => {
     Favorites.belongsTo(models.Inventory, { foreignKey: 'inventoryId' });
-    Favorites.belongsTo(models.Users, { foreignKey: 'userId' }); // Add this line
-
+    Favorites.belongsTo(models.Users, { foreignKey: 'userId' });
   };
 
   return Favorites;
