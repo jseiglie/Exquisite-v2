@@ -51,6 +51,9 @@ if (!process.env.PROD) {
     sequelizeOptions.alter = true;
 }
 
+sequelizeOptions.alter = true;
+
+
 app.get('*', (req, res) => {
     res.sendFile(join(__dirname, './client/build/index.html'));
   });

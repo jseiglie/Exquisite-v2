@@ -33,7 +33,6 @@ module.exports = (sequelize, DataTypes) => {
   ShoppingCarts.associate = (models) => {
     ShoppingCarts.belongsTo(models.Inventory, { foreignKey: 'inventoryId' });
     ShoppingCarts.belongsTo(models.Users, { foreignKey: 'userId' });
-    ShoppingCarts.hasMany(models.Sales, { foreignKey: 'shoppingCartId' });
 
   };
 

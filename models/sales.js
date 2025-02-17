@@ -35,20 +35,6 @@ module.exports = (sequelize, DataTypes) => {
         values: ["cash", "online"],
         defaultValue: "cash",
       },
-      inventoryId: {
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'Inventory',
-          key: 'id',
-        },
-      },
-      shoppingCartId: { // Add this field
-        type: DataTypes.INTEGER,
-        references: {
-          model: 'ShoppingCarts',
-          key: 'id',
-        },
-      },
     },
     {
       tableName: "Sales",
@@ -59,8 +45,12 @@ module.exports = (sequelize, DataTypes) => {
 
   Sales.associate = (models) => {
     Sales.belongsTo(models.Users, { foreignKey: 'userId' });
-    Sales.belongsTo(models.Inventory, { foreignKey: 'inventoryId' });
-    Sales.belongsTo(models.ShoppingCarts, { foreignKey: 'shoppingCartId' });
+    Sales.belongsTo(models.Users, { foreignKey: 'sellerId' });
+    Sales.belongsToMany(models.Inventory, {
+      through: 'SalesInventory',
+      foreignKey: 'salesId',
+      otherKey: 'inventoryId',
+    });
   };
 
   return Sales;
