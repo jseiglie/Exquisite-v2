@@ -17,6 +17,14 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING(255),
         allowNull: false,
       },
+      firstName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
+      lastName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       admin: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -44,9 +52,13 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Users.associate = (models) => {
-    Users.hasMany(models.Sales, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
-    Users.hasMany(models.ShoppingCarts, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
-    Users.hasMany(models.Favorites, { foreignKey: 'userId', onDelete: 'CASCADE' }); // Add this line
+    Users.hasMany(models.Sales, { foreignKey: 'userId', onDelete: 'CASCADE' }); 
+    Users.hasMany(models.ShoppingCarts, { foreignKey: 'userId', onDelete: 'CASCADE' }); 
+    Users.hasMany(models.Favorites, { foreignKey: 'userId', onDelete: 'CASCADE' }); 
+    Users.hasOne(models.UserProfile, { foreignKey: 'userId' });
+    Users.hasOne(models.Employee, { foreignKey: 'userId' });
+
+
   };
 
   return Users;

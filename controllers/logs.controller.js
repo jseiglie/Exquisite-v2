@@ -1,4 +1,4 @@
-const log = require("../class/logs.class.js");
+const Log = require("../class/logs.class.js");
 
 const logController = {};
 
@@ -15,7 +15,7 @@ logController.test = async (req, res) => {
 
 logController.getAll = async (req, res) => {
   try {
-    const resp = await log.getAll();
+    const resp = await Log.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -30,7 +30,7 @@ logController.create = async (req, res) => {
   try {
     const data = req.body;
 
-    const resp = await log.createLog(data);
+    const resp = await Log.createLog(data);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -44,7 +44,7 @@ logController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await log.deleteLog(id);
+    const resp = await Log.deleteLog(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);

@@ -1,4 +1,4 @@
-const sale = require("../class/sales.class.js");
+const Sale = require("../class/sales.class.js");
 
 const saleController = {};
 
@@ -15,7 +15,7 @@ saleController.test = async (req, res) => {
 
 saleController.getAll = async (req, res) => {
   try {
-    const resp = await sale.getAll();
+    const resp = await Sale.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -30,7 +30,7 @@ saleController.create = async (req, res) => {
   try {
     const data = req.body;
 
-    const resp = await sale.createSale(data);
+    const resp = await Sale.createSale(data);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -44,7 +44,7 @@ saleController.update = async (req, res) => {
   try {
     const { id, data } = req.body;
 
-    const resp = await sale.updateSale(id, data);
+    const resp = await Sale.updateSale(id, data);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -58,7 +58,7 @@ saleController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await sale.deleteSale(id);
+    const resp = await Sale.deleteSale(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);

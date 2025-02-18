@@ -1,4 +1,4 @@
-const shoppingCart = require("../class/shoppingCarts.class.js");
+const ShoppingCart = require("../class/shoppingCarts.class.js");
 
 const shoppingCartController = {};
 
@@ -15,7 +15,7 @@ shoppingCartController.test = async (req, res) => {
 
 shoppingCartController.getAll = async (req, res) => {
   try {
-    const resp = await shoppingCart.getAll();
+    const resp = await ShoppingCart.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -30,7 +30,7 @@ shoppingCartController.create = async (req, res) => {
   try {
     const data = req.body;
 
-    const resp = await shoppingCart.createShoppingCart(data);
+    const resp = await ShoppingCart.createShoppingCart(data);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -44,7 +44,7 @@ shoppingCartController.update = async (req, res) => {
   try {
     const { id, data } = req.body;
 
-    const resp = await shoppingCart.updateShoppingCart(id, data);
+    const resp = await ShoppingCart.updateShoppingCart(id, data);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -58,7 +58,7 @@ shoppingCartController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await shoppingCart.deleteShoppingCart(id);
+    const resp = await ShoppingCart.deleteShoppingCart(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);

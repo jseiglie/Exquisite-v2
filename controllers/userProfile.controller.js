@@ -1,36 +1,12 @@
-const Favorite = require("../class/favorites.class.js");
+const UserProfile = require("../class/userProfile.class.js");
 
-const favoriteController = {};
+const userProfileController = {};
 
-favoriteController.test = async (req, res) => {
-  console.log("-----FAVORITE TESTING-----");
-
+userProfileController.create = async (req, res) => {
   try {
-    res.send({ success: true, data: "test ok" });
-  } catch (error) {
-    console.error('error --//--> ', error);
-    res.send({ success: false, Error: error.message });
-  }
-};
+    const { userId, firstName, lastName, address, phoneNumber } = req.body;
 
-favoriteController.getAll = async (req, res) => {
-  try {
-    const resp = await Favorite.getAll();
-    console.log(await resp);
-
-    if (!resp.success) throw new Error('error --//--> ', resp.error);
-    res.status(200).send(resp);
-  } catch (error) {
-    console.error('error --//--> ', error);
-    res.status(418).send({ success: false, Error: error.message });
-  }
-};
-
-favoriteController.create = async (req, res) => {
-  try {
-    const data = req.body;
-
-    const resp = await Favorite.createFavorite(data);
+    const resp = await UserProfile.createUserProfile(userId, firstName, lastName, address, phoneNumber);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -40,11 +16,25 @@ favoriteController.create = async (req, res) => {
   }
 };
 
-favoriteController.delete = async (req, res) => {
+userProfileController.update = async (req, res) => {
+  try {
+    const { id, userId, firstName, lastName, address, phoneNumber } = req.body;
+
+    const resp = await UserProfile.updateUserProfile(id, userId, firstName, lastName, address, phoneNumber);
+    if (!resp.success) throw new Error('error --//--> ', resp.error);
+
+    res.status(200).send(resp);
+  } catch (error) {
+    console.error('error --//--> ', error);
+    res.status(418).send({ success: false, Error: error.message });
+  }
+};
+
+userProfileController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await Favorite.deleteFavorite(id);
+    const resp = await UserProfile.deleteUserProfile(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -54,4 +44,4 @@ favoriteController.delete = async (req, res) => {
   }
 };
 
-module.exports = favoriteController;
+module.exports = userProfileController;

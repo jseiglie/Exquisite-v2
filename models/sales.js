@@ -11,15 +11,16 @@ module.exports = (sequelize, DataTypes) => {
       userId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Users',
+          model: sequelize.models.Users,
           key: 'id',
         },
       },
       sellerId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Users',
+          model: sequelize.models.Users,
           key: 'id',
+          allowNull: true, //online purchase
         },
       },
       discount: {

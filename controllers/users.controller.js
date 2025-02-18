@@ -1,4 +1,4 @@
-const user = require("../class/users.class.js");
+const Users = require("../class/users.class.js");
 
 const userController = {};
 
@@ -17,7 +17,7 @@ userController.test = async (req, res) => {
 
 userController.getAll = async (req, res) => {
   try {
-    const resp = await user.getAll();
+    const resp = await Users.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -35,7 +35,7 @@ userController.login = async (req, res) => {
     if (email.trim().length < 6 || password.trim().length < 8)
       throw new Error("Credentials not correct");
 
-    const resp = await user.login(email, password, keepMeLogged);
+    const resp = await Users.login(email, password, keepMeLogged);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -52,7 +52,7 @@ userController.register = async (req, res) => {
     if (!email|| !password || email.trim().length < 6 || password.trim().length < 8)
       throw new Error("Credentials are not correct");
 
-    const resp = await user.register(email, password, keepMeLogged);
+    const resp = await Users.register(email, password, keepMeLogged);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
     res.status(201).send(resp);
   } catch (error) {
@@ -64,7 +64,7 @@ userController.register = async (req, res) => {
 userController.check = async (req, res) => {
   try {
     const id = req.user
-    const resp = await  user.getUser(id)
+    const resp = await  Users.getUser(id)
     res.status(200).send(resp);
   } catch (error) {
     console.error('error --//--> ', error);
@@ -75,7 +75,7 @@ userController.check = async (req, res) => {
 userController.getUser = async (req, res) => {
   try {
     const id = req.user;
-    const resp = await user.getUser(id);
+    const resp = await Users.getUser(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
     res.status(200).send(resp);
   } catch (error) {
@@ -89,7 +89,7 @@ userController.updateAvatar = async (req, res) => {
     const id = req.user
     const { url } = req.body;
     if (!url) throw new Error(" error --//--> Url not received");
-    const resp = await user.updateAvatar(url, id);
+    const resp = await Users.updateAvatar(url, id);
     res.status(200).send(resp);
   } catch (error) {
     console.error('error --//--> ', error);
@@ -97,24 +97,19 @@ userController.updateAvatar = async (req, res) => {
   }
 };
 
-// userController.getUserId = async (req, res) => {
-//   try {
-//     const authHeader = req.headers["authorization"];
+userController.getUserId = async (req, res) => {
+  try {
+    const payload = req.body;
 
-//     let token = authHeader && authHeader.split(" ")[1];
-//     if (!token) token = authHeader;
 
-//     if (token == null) {
-//       res.status(403).send({ success: false, error: "Token missing" });
-//     }
+    const user = await Users.getId(payload.userId);
+    if (!user) throw new Error("error --//--> User not found");
 
-//     user.getId(token);
-
-//     res.status(200).send(resp);
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(418).send({ success: false, Error: error.message });
-//   }
-// };
+    res.status(200).send(user);
+  } catch (error) {
+    console.error(error.message);
+    res.status(418).send({ success: false, Error: error.message });
+  }
+};
 
 module.exports = userController;

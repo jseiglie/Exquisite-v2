@@ -1,36 +1,12 @@
-const Favorite = require("../class/favorites.class.js");
+const Reports = require("../class/reports.class.js");
 
-const favoriteController = {};
+const reportsController = {};
 
-favoriteController.test = async (req, res) => {
-  console.log("-----FAVORITE TESTING-----");
-
+reportsController.create = async (req, res) => {
   try {
-    res.send({ success: true, data: "test ok" });
-  } catch (error) {
-    console.error('error --//--> ', error);
-    res.send({ success: false, Error: error.message });
-  }
-};
+    const { title, content, employeeIds } = req.body;
 
-favoriteController.getAll = async (req, res) => {
-  try {
-    const resp = await Favorite.getAll();
-    console.log(await resp);
-
-    if (!resp.success) throw new Error('error --//--> ', resp.error);
-    res.status(200).send(resp);
-  } catch (error) {
-    console.error('error --//--> ', error);
-    res.status(418).send({ success: false, Error: error.message });
-  }
-};
-
-favoriteController.create = async (req, res) => {
-  try {
-    const data = req.body;
-
-    const resp = await Favorite.createFavorite(data);
+    const resp = await Reports.createReport(title, content, employeeIds);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -40,11 +16,25 @@ favoriteController.create = async (req, res) => {
   }
 };
 
-favoriteController.delete = async (req, res) => {
+reportsController.update = async (req, res) => {
+  try {
+    const { id, title, content, employeeIds } = req.body;
+
+    const resp = await Reports.updateReport(id, title, content, employeeIds);
+    if (!resp.success) throw new Error('error --//--> ', resp.error);
+
+    res.status(200).send(resp);
+  } catch (error) {
+    console.error('error --//--> ', error);
+    res.status(418).send({ success: false, Error: error.message });
+  }
+};
+
+reportsController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await Favorite.deleteFavorite(id);
+    const resp = await Reports.deleteReport(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -54,4 +44,4 @@ favoriteController.delete = async (req, res) => {
   }
 };
 
-module.exports = favoriteController;
+module.exports = reportsController;

@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: false,
           references: {
-            model: "Inventory",
+            model: sequelize.models.Inventory,
             key: "id",
           },
           onDelete: "CASCADE",
@@ -21,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.INTEGER,
           allowNull: true, // Can be null if system-generated
           references: {
-            model: "Users",
+            model: sequelize.models.Users,
             key: "id",
           },
           onDelete: "SET NULL",
@@ -46,7 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       {
         tableName: "InventoryLogs",
-        timestamps: false, // Using our own timestamp field
+        timestamps: true,
         freezeTableName: true,
       }
     );

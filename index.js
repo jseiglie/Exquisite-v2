@@ -38,12 +38,26 @@ app.use(bodyParser.json());
 app.use('/api', router);
 app.use('/api/users', require('./routes/users.routes.js'));
 app.use('/api/inventory', require('./routes/inventory.routes.js'));
-app.use('/api/categories', require('./routes/categories.routes.js'));
-app.use('/api/subcategories', require('./routes/subcategories.routes.js'));
-app.use('/api/shoppingCarts', require('./routes/shoppingCarts.routes.js'));
-app.use('/api/favorites', require('./routes/favorites.routes.js'));
-app.use('/api/sales', require('./routes/sales.routes.js'));
-app.use('/api/logs', require('./routes/logs.routes.js'));
+app.use('/api/category', require('./routes/categories.routes.js'));
+app.use('/api/subcategory', require('./routes/subcategories.routes.js'));
+app.use('/api/shopping_cart', require('./routes/shoppingCarts.routes.js'));
+app.use('/api/favorite', require('./routes/favorites.routes.js'));
+app.use('/api/sale', require('./routes/sales.routes.js'));
+app.use('/api/log', require('./routes/logs.routes.js'));
+app.use('/api/sales_inventory', require('./routes/salesInventory.routes.js'));
+app.use('/api/attendance', require('./routes/attendance.routes.js'));
+app.use('/api/brand', require('./routes/brands.routes.js'));
+app.use('/api/department', require('./routes/departments.routes.js'));
+app.use('/api/employee', require('./routes/employees.routes.js'));
+app.use('/api/leave', require('./routes/leaves.routes.js'));
+app.use('/api/leave_balance', require('./routes/leaveBalance.routes.js'));
+app.use('/api/position', require('./routes/positions.routes.js'));
+app.use('/api/salary', require('./routes/salary.routes.js'));
+app.use('/api/salary_payment', require('./routes/salaryPayment.routes.js'));
+app.use('/api/user_profile', require('./routes/userProfile.routes.js'));
+app.use('/api/report', require('./routes/reports.routes.js'));
+
+
 const sequelizeOptions = {};
 
 

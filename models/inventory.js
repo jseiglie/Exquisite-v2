@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       brandId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'Brands',
+          model: sequelize.models.Brands,
           key: 'id',
         },
       },

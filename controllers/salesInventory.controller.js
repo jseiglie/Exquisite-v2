@@ -1,9 +1,9 @@
-const Inventory = require("../class/Inventory.class.js");
+const SalesInventory = require("../class/SalesInventory.class.js");
 
-const inventoryController = {};
+const salesInventoryController = {};
 
-inventoryController.test = async (req, res) => {
-  console.log("-----INVENTORY TESTING-----");
+salesInventoryController.test = async (req, res) => {
+  console.log("-----SALES INVENTORY TESTING-----");
 
   try {
     res.send({ success: true, data: "test ok" });
@@ -13,9 +13,9 @@ inventoryController.test = async (req, res) => {
   }
 };
 
-inventoryController.getAll = async (req, res) => {
+salesInventoryController.getAll = async (req, res) => {
   try {
-    const resp = await Inventory.getAll();
+    const resp = await SalesInventory.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -26,11 +26,11 @@ inventoryController.getAll = async (req, res) => {
   }
 };
 
-inventoryController.create = async (req, res) => {
+salesInventoryController.create = async (req, res) => {
   try {
-    const data = req.body;
+    const { salesId, inventoryId, quantity } = req.body;
 
-    const resp = await Inventory.createInventory(data);
+    const resp = await SalesInventory.createSalesInventory(salesId, inventoryId, quantity);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -40,11 +40,11 @@ inventoryController.create = async (req, res) => {
   }
 };
 
-inventoryController.update = async (req, res) => {
+salesInventoryController.update = async (req, res) => {
   try {
-    const { id, data } = req.body;
+    const { id, salesId, inventoryId, quantity } = req.body;
 
-    const resp = await Inventory.updateInventory(id, data);
+    const resp = await SalesInventory.updateSalesInventory(id, salesId, inventoryId, quantity);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -54,11 +54,11 @@ inventoryController.update = async (req, res) => {
   }
 };
 
-inventoryController.delete = async (req, res) => {
+salesInventoryController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await Inventory.deleteInventory(id);
+    const resp = await SalesInventory.deleteSalesInventory(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -68,4 +68,4 @@ inventoryController.delete = async (req, res) => {
   }
 };
 
-module.exports = inventoryController;
+module.exports = salesInventoryController;

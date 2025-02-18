@@ -1,4 +1,4 @@
-const subcategory = require("../class/subcategories.class.js");
+const Subcategory = require("../class/subcategories.class.js");
 
 const subcategoryController = {};
 
@@ -15,7 +15,7 @@ subcategoryController.test = async (req, res) => {
 
 subcategoryController.getAll = async (req, res) => {
   try {
-    const resp = await subcategory.getAll();
+    const resp = await Subcategory.getAll();
     console.log(await resp);
 
     if (!resp.success) throw new Error('error --//--> ', resp.error);
@@ -30,7 +30,7 @@ subcategoryController.create = async (req, res) => {
   try {
     const { name } = req.body;
 
-    const resp = await subcategory.createSubcategory(name);
+    const resp = await Subcategory.createSubcategory(name);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -44,7 +44,7 @@ subcategoryController.update = async (req, res) => {
   try {
     const { id, name } = req.body;
 
-    const resp = await subcategory.updateSubcategory(id, name);
+    const resp = await Subcategory.updateSubcategory(id, name);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
@@ -58,7 +58,7 @@ subcategoryController.delete = async (req, res) => {
   try {
     const { id } = req.body;
 
-    const resp = await subcategory.deleteSubcategory(id);
+    const resp = await Subcategory.deleteSubcategory(id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);
