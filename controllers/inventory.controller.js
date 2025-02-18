@@ -68,4 +68,20 @@ inventoryController.delete = async (req, res) => {
   }
 };
 
+inventoryController.checkOneStock = async (req, res) => {
+  try {
+    const  {itemId}  = req.body;
+    const item = await Inventory.findByPk(itemId);
+    if (item) {
+      res.status(200).send({ success: true, [item.itemName]: item.amount });
+      // You can also send an email or notification here
+    } else {
+      res.status(404).send({success: false, error: 'Item not found'});
+    }
+  } catch (error) {
+    console.error('Error checking inventory levels:', error);
+  }
+};
+
+
 module.exports = inventoryController;

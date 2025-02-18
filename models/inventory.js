@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       trigger: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: 0,
+        defaultValue: null,
       },
       brandId: {
         type: DataTypes.INTEGER,
