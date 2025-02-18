@@ -56,6 +56,7 @@ app.use('/api/salary', require('./routes/salary.routes.js'));
 app.use('/api/salary_payment', require('./routes/salaryPayment.routes.js'));
 app.use('/api/user_profile', require('./routes/userProfile.routes.js'));
 app.use('/api/report', require('./routes/reports.routes.js'));
+app.use('/api/supplier', require('./routes/suppliers.routes.js'));
 
 
 const sequelizeOptions = {};

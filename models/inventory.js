@@ -32,6 +32,14 @@ module.exports = (sequelize, DataTypes) => {
           key: 'id',
         },
       },
+      supplierId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: sequelize.models.Suppliers,
+          key: 'id',
+        },
+        allowNull: false,
+      },
     },
     {
       tableName: "Inventory",
@@ -42,6 +50,8 @@ module.exports = (sequelize, DataTypes) => {
 
   Inventory.associate = (models) => {
     Inventory.belongsTo(models.Brand, { foreignKey: 'brandId' });
+    Inventory.belongsTo(models.Suppliers, { foreignKey: 'supplierId' }); 
+
   };
 
   return Inventory;
