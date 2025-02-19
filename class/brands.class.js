@@ -10,6 +10,17 @@ module.exports = class Brands {
     }
   }
 
+  static async getBrands() {
+    try {
+      const brands = await model.findAll();
+      return { success: true, brands };
+    } catch (error) {
+      console.error("Error getting brands:", error);
+      return { success: false, error: error.message };
+    }
+  }
+
+
   static async getBrand(id) {
     try {
       const brand = await model.findOne({ where: { id } });

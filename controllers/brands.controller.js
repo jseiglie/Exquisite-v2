@@ -24,7 +24,7 @@ brandController.getAll = async (req, res) => {
 
 brandController.create = async (req, res) => {
   try {
-    const brand = await Brand.create(req.body);
+    const brand = await Brand.createBrand(req.body.name);
     res.status(201).json(brand);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -33,7 +33,7 @@ brandController.create = async (req, res) => {
 
 brandController.getById = async (req, res) => {
   try {
-    const brand = await Brand.findByPk(req.params.id);
+    const brand = await Brand.getBrand(req.params.id);
     if (brand) {
       res.status(200).json(brand);
     } else {
