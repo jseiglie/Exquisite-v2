@@ -57,7 +57,7 @@ app.use('/api/salary_payment', require('./routes/salaryPayment.routes.js'));
 app.use('/api/user_profile', require('./routes/userProfile.routes.js'));
 app.use('/api/report', require('./routes/reports.routes.js'));
 app.use('/api/supplier', require('./routes/suppliers.routes.js'));
-
+app.use('api/inventory_movement', require('./routes/inventoryMovement.routes.js'));
 
 const sequelizeOptions = {};
 
@@ -66,7 +66,7 @@ if (!process.env.PROD) {
     sequelizeOptions.alter = true;
 }
 
-sequelizeOptions.alter = true;
+sequelizeOptions.force = true;
 
 
 app.get('*', (req, res) => {

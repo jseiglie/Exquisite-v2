@@ -27,7 +27,7 @@ module.exports = (sequelize, DataTypes) => {
           type: DataTypes.STRING,
           allowNull: false,
         },
-        type: {
+        reason: {
           type: DataTypes.ENUM,
           values: ["vacation", "sick", "personal", "other"],
           allowNull: false,

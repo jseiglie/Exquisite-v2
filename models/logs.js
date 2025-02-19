@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
             model: sequelize.models.Users,
             key: "id",
           },
-          onDelete: "SET NULL",
+          onDelete: "CASCADE",
         },
         action: {
           type: DataTypes.ENUM("insert", "update", "delete"),

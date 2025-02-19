@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      size: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
       quantity: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -23,7 +27,20 @@ module.exports = (sequelize, DataTypes) => {
       trigger: {
         type: DataTypes.INTEGER,
         allowNull: false,
-        defaultValue: null,
+        defaultValue: false,
+      },
+      supplierAlert: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+      supplierId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: sequelize.models.Suppliers,
+          key: "id",
+        },
+        allowNull: false,
       },
       brandId: {
         type: DataTypes.INTEGER,
