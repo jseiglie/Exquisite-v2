@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       inventoryId: {
         type: DataTypes.INTEGER,
+        unique: false,
         allowNull: false,
         references: {
           model: sequelize.models.Inventories,
@@ -18,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
+        unique: false,
         allowNull: false,
         references: {
           model: sequelize.models.Users,
@@ -26,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       supplierId: {
         type: DataTypes.INTEGER,
+        unique: false,
         allowNull: true,
         references: {
           model: sequelize.models.Suppliers,

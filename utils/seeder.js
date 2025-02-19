@@ -1,4 +1,4 @@
-const { Users, UserProfile, Employee, Departments, Positions, Category, Subcategory, Suppliers, Inventory, Brand, Sales, ShoppingCarts, Favorites, Salary, Attendance, Leave, LeaveBalance, Report, EmployeeReports, InventoryMovement } = require('../models'); // Adjust the path as necessary
+const { Users, UserProfile, Employee, Departments, Positions, Category, Subcategory, Suppliers, Inventory, Brand, Sales, ShoppingCarts, Favorites, Salary, Attendance, Leave, LeaveBalance, Report, EmployeeReports, InventoryMovement, SalesInventory } = require('../models'); // Adjust the path as necessary
 
 const users = [
   {
@@ -77,7 +77,8 @@ const subcategories = [
 const suppliers = [
   { name: 'Supplier1', email: 'supplier1@example.com', address: '123 Supplier St', landline: '555-555-5551', mobile: '555-555-5552', company: 'Supplier Company 1' },
   { name: 'Supplier2', email: 'supplier2@example.com', address: '456 Supplier Ave', landline: '555-555-5553', mobile: '555-555-5554', company: 'Supplier Company 2' },
-  { name: 'Supplier3', email: 'supplier3@example.com', address: '789 Supplier Blvd', landline: '555-555-5555', mobile: '555-555-5556', company: 'Supplier Company 3' }
+  { name: 'Supplier3', email: 'supplier3@example.com', address: '789 Supplier Blvd', landline: '555-777-5555', mobile: '555-555-5556', company: 'Supplier Company 3' },
+  { name: 'Supplier4', email: 'supplier4@example.com', address: '901 Supplier Blvd', landline: '555-666-5555', mobile: '555-555-5557', company: 'Supplier Company 4' }
 ];
 
 const brands = [
@@ -106,17 +107,34 @@ const inventory = [
 
 const sales = [
   { userId: 1, inventoryId: 1, quantity: 2, total: 20.00 },
-  { userId: 2, inventoryId: 2, quantity: 1, total: 20.00 }
+  { userId: 2, inventoryId: 2, quantity: 1, total: 20.00 },
+  { userId: 1, inventoryId: 3, quantity: 2, total: 20.00 },
+  { userId: 2, inventoryId: 4, quantity: 1, total: 20.00 },
+  { userId: 2, inventoryId: 5, quantity: 1, total: 20.00 },
+  { userId: 1, inventoryId: 5, quantity: 1, total: 20.00 },
+  { userId: 2, inventoryId: 7, quantity: 1, total: 20.00 },
+  { userId: 2, inventoryId: 8, quantity: 1, total: 20.00 },
+  { userId: 1, inventoryId: 7, quantity: 1, total: 20.00 },
+  { userId: 1, inventoryId: 8, quantity: 1, total: 20.00 }
+
 ];
 
 const shoppingCarts = [
   { userId: 1, inventoryId: 1, quantity: 1 },
-  { userId: 2, inventoryId: 2, quantity: 2 }
+  { userId: 2, inventoryId: 2, quantity: 2 },
+  { userId: 3, inventoryId: 3, quantity: 2 },
+  { userId: 4, inventoryId: 4, quantity: 2 },
+  { userId: 5, inventoryId: 5, quantity: 2 },
 ];
 
 const favorites = [
   { userId: 1, inventoryId: 1 },
-  { userId: 2, inventoryId: 2 }
+  { userId: 2, inventoryId: 2 },
+  { userId: 1, inventoryId: 2 },
+  { userId: 1, inventoryId: 3 },
+  { userId: 2, inventoryId: 4 },
+  { userId: 4, inventoryId: 1 },
+  { userId: 2, inventoryId: 3 }
 ];
 
 const salaries = [
@@ -126,12 +144,21 @@ const salaries = [
 
 const attendances = [
   { employeeId: 1, date: new Date(), status: 'Present' },
-  { employeeId: 2, date: new Date(), status: 'Absent' }
+  { employeeId: 2, date: new Date(), status: 'Absent' },
+  { employeeId: 1, date: new Date(), status: 'Present' },
+  { employeeId: 1, date: new Date(), status: 'Present' },
+  { employeeId: 1, date: new Date(), status: 'Present' },
+  { employeeId: 1, date: new Date(), status: 'Absent' },
 ];
 
 const leaves = [
   { employeeId: 1, startDate: new Date(), endDate: new Date(), reason: 'Vacation' },
-  { employeeId: 2, startDate: new Date(), endDate: new Date(), reason: 'Sick' }
+  { employeeId: 2, startDate: new Date(), endDate: new Date(), reason: 'Sick' },
+  { employeeId: 2, startDate: new Date(), endDate: new Date(), reason: 'Sick' },
+  { employeeId: 2, startDate: new Date(), endDate: new Date(), reason: 'Sick' },
+  { employeeId: 1, startDate: new Date(), endDate: new Date(), reason: 'Vacation' },
+  { employeeId: 1, startDate: new Date(), endDate: new Date(), reason: 'Vacation' },
+  { employeeId: 1, startDate: new Date(), endDate: new Date(), reason: 'Vacation' }
 ];
 
 const leaveBalances = [
@@ -141,12 +168,23 @@ const leaveBalances = [
 
 const reports = [
   { title: 'Monthly Report', content: 'Report content' },
-  { title: 'Annual Report', content: 'Report content' }
+  { title: 'Annual Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' },
+  { title: 'Monthly Report', content: 'Report content' }
 ];
 
 const employeeReports = [
   { employeeId: 1, reportId: 1 },
-  { employeeId: 2, reportId: 2 }
+  { employeeId: 2, reportId: 2 },
+  { employeeId: 1, reportId: 3 },
+  { employeeId: 1, reportId: 4 },
+  { employeeId: 2, reportId: 5 },
+  { employeeId: 4, reportId: 6 },
+  { employeeId: 2, reportId: 7 }
 ];
 
 const inventoryMovements = [
@@ -155,6 +193,19 @@ const inventoryMovements = [
   { inventoryId: 3, userId: 1, supplierId: 3, quantity: 30, movementType: 'IN', date: new Date() },
   { inventoryId: 4, userId: 2, supplierId: 1, quantity: 40, movementType: 'OUT', date: new Date() }
 ];
+
+const salesInventory = [
+    { salesId: 1, inventoryId: 1, quantity: 2, price: 10.00 },
+    { salesId: 2, inventoryId: 2, quantity: 1, price: 20.00 },
+    { salesId: 3, inventoryId: 3, quantity: 2, price: 10.00 },
+    { salesId: 4, inventoryId: 4, quantity: 1, price: 20.00 },
+    { salesId: 5, inventoryId: 5, quantity: 2, price: 10.00 },
+    { salesId: 6, inventoryId: 6, quantity: 1, price: 20.00 },
+    { salesId: 7, inventoryId: 7, quantity: 2, price: 10.00 },
+    { salesId: 8, inventoryId: 8, quantity: 1, price: 20.00 },
+    { salesId: 9, inventoryId: 9, quantity: 2, price: 10.00 },
+    { salesId: 10, inventoryId: 10, quantity: 1, price: 20.00 }
+  ];
 
 const seedUsers = async () => {
   try {
@@ -365,6 +416,17 @@ const seedInventoryMovements = async () => {
   }
 };
 
+const seedSalesInventory = async () => {
+  try {
+    for (const salesInventoryData of salesInventory) {
+      await SalesInventory.create(salesInventoryData);
+    }
+    console.log('Sales Inventory seeded successfully');
+  } catch (error) {
+    console.error('Error seeding sales inventory:', error);
+  }
+};
+
 const seeder = async () => {
   console.log('seedDepartments');
   await seedDepartments();
@@ -437,6 +499,10 @@ const seeder = async () => {
   console.log('seedInventoryMovements');
   await seedInventoryMovements();
   console.log('completed seedInventoryMovements');
+
+  console.log('seedSalesInventory');
+  await seedSalesInventory();
+  console.log('completed seedSalesInventory');
 
   process.exit();
 };

@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         salaryId: {
           type: DataTypes.INTEGER,
+          unique: false,
           references: {
             model: sequelize.models.Salaries,
             key: 'id',

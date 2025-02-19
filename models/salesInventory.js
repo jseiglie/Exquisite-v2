@@ -2,8 +2,15 @@ module.exports = (sequelize, DataTypes) => {
     const SalesInventory = sequelize.define(
       "SalesInventory",
       {
+        id: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+          primaryKey: true,
+          autoIncrement: true,
+        },
         salesId: {
           type: DataTypes.INTEGER,
+          unique: false,
           references: {
             model: sequelize.models.Sales,
             key: 'id',
@@ -11,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         inventoryId: {
           type: DataTypes.INTEGER,
+          unique: false,
           references: {
             model: sequelize.models.Inventory,
             key: 'id',

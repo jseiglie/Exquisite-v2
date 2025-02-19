@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
+        unique: false,
         references: {
           model: sequelize.models.Users,
           key: 'id',
@@ -17,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
       },
       sellerId: {
         type: DataTypes.INTEGER,
+        unique: false,
         references: {
           model: sequelize.models.Users,
           key: 'id',
