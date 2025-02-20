@@ -12,7 +12,8 @@ module.exports = class Employee {
 
   static async getEmployee(id) {
     try {
-      const employee = await model.findOne({ where: { id } });
+      
+      const employee = await model.findOne({ where: { userId: id } });
       if (!employee) throw new Error("Not found");
       return { success: true, employee };
     } catch (error) {

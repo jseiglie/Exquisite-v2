@@ -3,7 +3,9 @@ const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const model = require("../models").Users;
 const UserProfile = require("../models").UserProfile;
+const UserProfileClass = require("./userProfile.class.js");
 const Employee = require("../models").Employee;
+const EmployeeClass = require("./employee.class.js");
 const jwt = require("jsonwebtoken");
 
 const JWT_SECRET =
@@ -81,8 +83,6 @@ module.exports = class Users {
   // Check if the provided password matches the hashed password
   static async checkPassword(password, userPassword) {
     try {
-      console.log("password", password);
-      console.log("userPassword", userPassword);
       if (!password || !userPassword) throw new Error("Missing parameters");
       const isMatch = await bcrypt.compare(password, userPassword);
       return isMatch;
@@ -98,10 +98,9 @@ module.exports = class Users {
       if (!username) throw new Error("Missing username parameter");
       const user = await model.findOne({
         where: { username },
-        attributes: { include: ['password'] } // Include the password attribute explicitly for comparison
+        attributes: { include: ["password"] }, // Include the password attribute explicitly for comparison
       });
-      console.log("user", user);
-      
+
       return user; // Return user if found, otherwise null
     } catch (error) {
       console.error("Error checking username:", error);
@@ -148,7 +147,26 @@ module.exports = class Users {
 
       // Omit the password before returning the user
       delete user.dataValues.password;
-      const token = this.generateToken(user.id, user.role, user.admin, keepMeLogged);
+      if (user.dataValues.role === "user") {
+        const userProfile = await UserProfileClass.getUserProfile(
+          user.dataValues.id
+        );
+        user.dataValues.profile = userProfile.userProfile.dataValues;
+      }
+      if (
+        user.dataValues.role === "seller" ||
+        user.dataValues.role === "admin" ||
+        user.dataValues.role === "company"
+      ) {
+        const employee = await EmployeeClass.getEmployee(user.dataValues.id);
+        user.dataValues.profile = employee.employee;
+      }
+      const token = this.generateToken(
+        user.id,
+        user.role,
+        user.admin,
+        keepMeLogged
+      );
 
       return { success: true, user, token };
     } catch (error) {
@@ -158,39 +176,64 @@ module.exports = class Users {
   }
 
   // Handle user registration
-  static async register(username, password, keepMeLogged, role, admin, company, positionId, departmentId) {
+  static async register(
+    username,
+    password,
+    keepMeLogged,
+    role,
+    admin,
+    company,
+    positionId,
+    departmentId
+  ) {
     try {
-      if (!username || !password || !role ) throw new Error("Missing parameters");
+      if (!username || !password || !role)
+        throw new Error("Missing parameters");
 
       // Check if username is already in use
       const usernameInUse = await this.checkUsername(username);
-      if (usernameInUse) throw new Error("Username in use, try a different one or logging in");
+      if (usernameInUse)
+        throw new Error("Username in use, try a different one or logging in");
 
       // Create the new user in the database
       const user = await model.create({
         username,
         password,
-        role, 
-        admin, 
-        company
+        role,
+        admin,
+        company,
       });
-      if (user.dataValues.role==="user") {
-        const userProfile = await UserProfile.create({ userId: user.dataValues.id });
+      if (user.dataValues.role === "user") {
+        const userProfile = await UserProfile.create({
+          userId: user.dataValues.id,
+        });
         user.dataValues.profile = userProfile.dataValues;
       }
-      if (user.dataValues.role==="seller" || user.dataValues.role==="admin" || user.dataValues.role==="company") {
-        if (!positionId || !departmentId ) {
+      if (
+        user.dataValues.role === "seller" ||
+        user.dataValues.role === "admin" ||
+        user.dataValues.role === "company"
+      ) {
+        if (!positionId || !departmentId) {
           await model.destroy({ where: { id: user.dataValues.id } });
           throw new Error("Missing parameters");
         }
-        const employee = await Employee.create({ userId: user.dataValues.id, positionId, departmentId });
-        console.log("Employee -------> ", employee);
+        const employee = await Employee.create({
+          userId: user.dataValues.id,
+          positionId,
+          departmentId,
+        });
         user.dataValues.profile = employee.dataValues;
       }
 
       // Omit the password before returning the user
       delete user.dataValues.password;
-      const token = this.generateToken(user.id, user.role, user.admin, keepMeLogged);
+      const token = this.generateToken(
+        user.id,
+        user.role,
+        user.admin,
+        keepMeLogged
+      );
 
       return { success: true, user, token };
     } catch (error) {
@@ -222,6 +265,6 @@ module.exports = class Users {
     } catch (error) {
       console.error("Error deleting user:", error);
       return { success: false, error: error.message };
-  }
+    }
   }
 };

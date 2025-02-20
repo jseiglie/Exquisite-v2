@@ -12,7 +12,7 @@ module.exports = class UserProfile {
 
   static async getUserProfile(id) {
     try {
-      const userProfile = await model.findOne({ where: { id } });
+      const userProfile = await model.findOne({ where: { userId: id } });
       if (!userProfile) throw new Error("Not found");
       return { success: true, userProfile };
     } catch (error) {
