@@ -1,5 +1,5 @@
 require("dotenv").config();
-const model = require("../models").Department;
+const model = require("../models").Departments;
 
 module.exports = class Department {
   constructor() {
@@ -10,8 +10,20 @@ module.exports = class Department {
     }
   }
 
+  static async getAllDepartments() {
+    try {
+      const department = await model.findAll();
+      if (!department) throw new Error("Not found");
+      return { success: true, department };
+    } catch (error) {
+      console.error("Error getting department:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
   static async getDepartment(id) {
     try {
+      
       const department = await model.findOne({ where: { id } });
       if (!department) throw new Error("Not found");
       return { success: true, department };

@@ -19,7 +19,19 @@ module.exports = class Employee {
       console.error("Error getting employee:", error);
       return { success: false, error: error.message };
     }
-  }
+  };
+
+  static async getAllEmployees() {
+    try {
+      const employees = await model.findAll();
+      if (!employees) throw new Error("Not found");
+      return { success: true, employees };
+    } catch (error) {
+      console.error("Error getting employees:", error);
+      return { success: false, error: error.message };
+    }
+  };
+
 
   static async createEmployee(userId, positionId, departmentId) {
     try {
@@ -29,7 +41,7 @@ module.exports = class Employee {
       console.error("Error creating employee:", error);
       return { success: false, error: error.message };
     }
-  }
+  };
 
   static async updateEmployee(id, userId, positionId, departmentId) {
     try {
@@ -40,7 +52,7 @@ module.exports = class Employee {
       console.error("Error updating employee:", error);
       return { success: false, error: error.message };
     }
-  }
+  };
 
   static async deleteEmployee(id) {
     try {
@@ -50,5 +62,5 @@ module.exports = class Employee {
       console.error("Error deleting employee:", error);
       return { success: false, error: error.message };
     }
-  }
+  };
 };

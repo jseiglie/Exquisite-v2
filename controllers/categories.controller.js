@@ -26,6 +26,15 @@ categoryController.getAll = async (req, res) => {
   }
 };
 
+categoryController.getById = async (req, res) => {
+  try {
+   
+    res.status(200).send(req.resource);
+  } catch (error) {
+    console.error('error --//--> ', error);
+    res.status(418).send({ success: false, Error: error.message });
+  }
+};
 categoryController.create = async (req, res) => {
   try {
     const { name } = req.body;
@@ -56,9 +65,8 @@ categoryController.update = async (req, res) => {
 
 categoryController.delete = async (req, res) => {
   try {
-    const { id } = req.body;
 
-    const resp = await category.deleteCategory(id);
+    const resp = await category.deleteCategory(req.params.id);
     if (!resp.success) throw new Error('error --//--> ', resp.error);
 
     res.status(200).send(resp);

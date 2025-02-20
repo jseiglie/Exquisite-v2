@@ -47,7 +47,7 @@ app.use('/api/log', require('./routes/logs.routes.js'));
 app.use('/api/sales_inventory', require('./routes/salesInventory.routes.js'));
 app.use('/api/attendance', require('./routes/attendance.routes.js'));
 app.use('/api/brand', require('./routes/brands.routes.js'));
-app.use('/api/department', require('./routes/departments.routes.js'));
+app.use('/api/departments', require('./routes/departments.routes.js'));
 app.use('/api/employee', require('./routes/employees.routes.js'));
 app.use('/api/leave', require('./routes/leaves.routes.js'));
 app.use('/api/leave_balance', require('./routes/leaveBalance.routes.js'));

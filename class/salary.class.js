@@ -12,7 +12,7 @@ module.exports = class Salary {
 
   static async getSalary(id) {
     try {
-      const salary = await model.findOne({ where: { id } });
+      const salary = await model.findOne({ where: { employeeId: id } });
       if (!salary) throw new Error("Not found");
       return { success: true, salary };
     } catch (error) {

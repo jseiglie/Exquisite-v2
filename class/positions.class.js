@@ -1,5 +1,5 @@
 require("dotenv").config();
-const model = require("../models").Position;
+const model = require("../models").Positions;
 
 module.exports = class Positions {
   constructor() {
@@ -12,6 +12,7 @@ module.exports = class Positions {
 
   static async getPosition(id) {
     try {
+      
       const position = await model.findOne({ where: { id } });
       if (!position) throw new Error("Not found");
       return { success: true, position };
