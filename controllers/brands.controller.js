@@ -6,7 +6,10 @@ brandController.test = async (req, res) => {
   console.log("-----CATEGORY TESTING-----");
 
   try {
-    res.send({ success: true, data: "test ok" });
+    console.log("req.user------> ", req.user)
+    console.log("req.token----------> ",req.token)
+    
+    res.send({ success: true, test: "ok" });
   } catch (error) {
     console.error("error --//--> ", error);
     res.send({ success: false, Error: error.message });
