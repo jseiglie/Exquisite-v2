@@ -9,6 +9,8 @@ apiRoutes.post('/login', userControl.login)
 apiRoutes.post('/register', userControl.register)
 apiRoutes.get("/check", auth, userControl.check)
 apiRoutes.get('/get_user', userControl.getUser)
+apiRoutes.get('/all', auth,  userControl.getAll)
+apiRoutes.delete('/delete/:id',  userControl.delete)
 
 //mailer
 // apiRoutes.post("/contact", mailer)

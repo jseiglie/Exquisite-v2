@@ -1,3 +1,5 @@
+const { toDefaultValue } = require("sequelize/lib/utils");
+
 module.exports = (sequelize, DataTypes) => {
   const Employee = sequelize.define(
     "Employee",
@@ -32,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       hired: {
         type: DataTypes.DATE,
         allowNull: false,
+        defaultValue: new Date(),
       },
       terminated: {
         type: DataTypes.DATE,

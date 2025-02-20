@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt');
+
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define(
     "Users",
@@ -48,6 +50,23 @@ module.exports = (sequelize, DataTypes) => {
       tableName: "Users",
       timeStamp: true,
       freezeTableName: true,
+      defaultScope: {
+        attributes: { exclude: ['password'] }, //removes the password from the query results
+      },
+      hooks: {
+        beforeCreate: async (user) => {
+          if (user.password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(user.password, salt);
+          }
+        },
+        beforeUpdate: async (user) => {
+          if (user.password) {
+            const salt = await bcrypt.genSalt(10);
+            user.password = await bcrypt.hash(user.password, salt);
+          }
+        },
+      },
     }
   );
 
@@ -57,8 +76,6 @@ module.exports = (sequelize, DataTypes) => {
     Users.hasMany(models.Favorites, { foreignKey: 'userId', onDelete: 'CASCADE' }); 
     Users.hasOne(models.UserProfile, { foreignKey: 'userId' });
     Users.hasOne(models.Employee, { foreignKey: 'userId' });
-
-
   };
 
   return Users;

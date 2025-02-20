@@ -2,10 +2,14 @@ require("dotenv").config();
 const { Op } = require("sequelize");
 const bcrypt = require("bcrypt");
 const model = require("../models").Users;
+const UserProfile = require("../models").UserProfile;
+const Employee = require("../models").Employee;
 const jwt = require("jsonwebtoken");
+
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   "Pw#u=z>y9Cq@s7+Fk3LZGVe<}&-AdBW?./h!;%8$nx]H~*S6rv";
+
 module.exports = class Users {
   constructor() {
     try {
@@ -15,13 +19,15 @@ module.exports = class Users {
     }
   }
 
-  static generateToken(userId, expires) {
+  static generateToken(userId, role, admin, expires) {
     try {
       const expirationDate = {};
       if (!expires) {
         expirationDate.expiresIn = "1d";
+      } else {
+        expirationDate.expiresIn = "30d";
       }
-      return jwt.sign({ id: userId }, JWT_SECRET, expirationDate); // Customize expiration as needed
+      return jwt.sign({ id: userId, role, admin }, JWT_SECRET, expirationDate); // Include role and admin in the payload
     } catch (error) {
       return { success: false, error: error.message };
     }
@@ -75,6 +81,8 @@ module.exports = class Users {
   // Check if the provided password matches the hashed password
   static async checkPassword(password, userPassword) {
     try {
+      console.log("password", password);
+      console.log("userPassword", userPassword);
       if (!password || !userPassword) throw new Error("Missing parameters");
       const isMatch = await bcrypt.compare(password, userPassword);
       return isMatch;
@@ -85,25 +93,54 @@ module.exports = class Users {
   }
 
   // Check if the email already exists in the database
-  static async checkEmail(email) {
+  static async checkUsername(username) {
     try {
-      if (!email) throw new Error("Missing email parameter");
-      const user = await model.findOne({ where: { email } });
+      if (!username) throw new Error("Missing username parameter");
+      const user = await model.findOne({
+        where: { username },
+        attributes: { include: ['password'] } // Include the password attribute explicitly for comparison
+      });
+      console.log("user", user);
+      
       return user; // Return user if found, otherwise null
     } catch (error) {
-      console.error("Error checking email:", error);
+      console.error("Error checking username:", error);
+      return { success: false, error: error.message };
+    }
+  }
+
+  static async updatePassword(id, password) {
+    try {
+      if (!password) return { success: false, error: "Password missing" };
+
+      const hashedPassword = await this.hash(password);
+
+      await model.update({ password: hashedPassword }, { where: { id } });
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  }
+
+  static async getAll() {
+    try {
+      const users = await model.findAll();
+      return { success: true, users };
+    } catch (error) {
+      console.error("Error getting all users:", error);
       return { success: false, error: error.message };
     }
   }
 
   // Handle login functionality
-  static async login(email, password, keepMeLogged) {
+  static async login(username, password, keepMeLogged) {
     try {
-      if (!email || !password) throw new Error("Missing parameters");
+      if (!username || !password) throw new Error("Missing parameters");
 
-      // Check if the email exists
-      const user = await this.checkEmail(email);
-      if (!user) throw new Error("Email not in use");
+      // Check if the username exists
+      const user = await this.checkUsername(username);
+      if (!user) throw new Error("username not in use");
 
       // Check if the password is correct
       const passwordMatch = await this.checkPassword(password, user.password);
@@ -111,7 +148,7 @@ module.exports = class Users {
 
       // Omit the password before returning the user
       delete user.dataValues.password;
-      const token = this.generateToken(user.id, keepMeLogged);
+      const token = this.generateToken(user.id, user.role, user.admin, keepMeLogged);
 
       return { success: true, user, token };
     } catch (error) {
@@ -121,26 +158,39 @@ module.exports = class Users {
   }
 
   // Handle user registration
-  static async register(email, password) {
+  static async register(username, password, keepMeLogged, role, admin, company, positionId, departmentId) {
     try {
-      if (!email || !password) throw new Error("Missing parameters");
+      if (!username || !password || !role ) throw new Error("Missing parameters");
 
-      // Check if email is already in use
-      const emailInUse = await this.checkEmail(email);
-      if (emailInUse) throw new Error("Email in use, try logging in");
-
-      // Hash the password before saving
-      const hashedPassword = await this.hash(password);
+      // Check if username is already in use
+      const usernameInUse = await this.checkUsername(username);
+      if (usernameInUse) throw new Error("Username in use, try a different one or logging in");
 
       // Create the new user in the database
       const user = await model.create({
-        email: email,
-        password: hashedPassword,
+        username,
+        password,
+        role, 
+        admin, 
+        company
       });
+      if (user.dataValues.role==="user") {
+        const userProfile = await UserProfile.create({ userId: user.dataValues.id });
+        user.dataValues.profile = userProfile.dataValues;
+      }
+      if (user.dataValues.role==="seller" || user.dataValues.role==="admin" || user.dataValues.role==="company") {
+        if (!positionId || !departmentId ) {
+          await model.destroy({ where: { id: user.dataValues.id } });
+          throw new Error("Missing parameters");
+        }
+        const employee = await Employee.create({ userId: user.dataValues.id, positionId, departmentId });
+        console.log("Employee -------> ", employee);
+        user.dataValues.profile = employee.dataValues;
+      }
 
       // Omit the password before returning the user
       delete user.dataValues.password;
-      const token = this.generateToken(user.id, true);
+      const token = this.generateToken(user.id, user.role, user.admin, keepMeLogged);
 
       return { success: true, user, token };
     } catch (error) {
@@ -148,6 +198,7 @@ module.exports = class Users {
       return { success: false, error: error.message };
     }
   }
+
   static async updateAvatar(avatar, id) {
     try {
       if (!avatar) return { success: false, error: "Avatar url missing" };
@@ -162,5 +213,15 @@ module.exports = class Users {
     } catch (error) {
       return { success: false, error: error.message };
     }
+  }
+
+  static async delete(id) {
+    try {
+      await model.destroy({ where: { id } });
+      return { success: true };
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      return { success: false, error: error.message };
+  }
   }
 };
